@@ -1,9 +1,9 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Search } from "lucide-react";
-import { Roboto_Mono, Orbitron } from "next/font/google";
+import { Roboto_Mono } from "next/font/google";
 
 const robotoMono = Roboto_Mono({ subsets: ["latin"] });
-const orbitron = Orbitron({ subsets: ["latin"] });
 
 export default function Navbar() {
   return (
@@ -11,9 +11,17 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
         {/* Logo Section */}
         <div className="flex flex-col items-start select-none">
-          <div className="w-8 h-8 bg-gradient-to-br from-[#bfff00] via-[#02A3DC] to-[#8b5cf6] rounded-sm flex items-center justify-center font-bold text-[11px] text-black shadow-[0_0_15px_rgba(2,163,220,0.3)]">
-            UE
+          {/* Real Logo Image */}
+          <div className="relative w-10 h-10">
+            <Image
+              src="/urbanedge-logo.png"
+              alt="Urban Edge Logo"
+              fill
+              className="object-contain"
+              priority
+            />
           </div>
+          {/* Roboto Mono Label */}
           <span
             className={`${robotoMono.className} uppercase tracking-[0.25em] font-bold text-[10px] mt-2 text-white/90`}
           >
@@ -45,7 +53,7 @@ export default function Navbar() {
           </div>
 
           {/* Icon-only Search Button */}
-          <button className="flex items-center justify-center w-10 h-10 bg-white text-black rounded-sm hover:bg-[#02A3DC] hover:text-white transition-all duration-300 group shadow-lg">
+          <button className="flex items-center justify-center w-10 h-10 bg-white text-black rounded-sm hover:bg-[#02A3DC] hover:text-white transition-all duration-300 group">
             <Search
               size={18}
               strokeWidth={2.5}
