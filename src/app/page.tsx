@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero";
 import ProductShowcase from "@/components/ProductShowcase";
 import ProductOfMonth from "@/components/ProductOfMonth";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -8,7 +9,7 @@ export default function Home() {
       <Hero />
       <ProductShowcase />
       <ProductOfMonth />
-      {/* Footer will go next */}
+      <Footer />
     </main>
   );
 }
