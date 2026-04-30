@@ -1,7 +1,9 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link"; // Added Link
 import { motion } from "framer-motion";
 import { Roboto_Mono, Orbitron } from "next/font/google";
+import { ArrowRight } from "lucide-react"; // Added for the icon
 import AddToCartButton from "./AddToCartButton";
 
 const robotoMono = Roboto_Mono({ subsets: ["latin"] });
@@ -47,13 +49,14 @@ export default function ProductShowcase() {
         >
           Discover More in our Techwear Winter Collection
         </h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           {products.map((product) => (
             <motion.div
               key={product.id}
               className="group cursor-pointer relative"
             >
-              <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-zinc-900 mb-5 border border-white/5 transition-all duration-500 group-hover:border-[#02A3DC] group-hover:shadow-[0_0_50px_rgba(2,163,220,0.8)]">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-zinc-900 mb-5 border border-white/5 transition-all duration-500 group-hover:border-[#02A3DC] group-hover:shadow-[0_0_50px_rgba(2,163,220,0.4)]">
                 <Image
                   src={product.img}
                   alt={product.name}
@@ -87,6 +90,16 @@ export default function ProductShowcase() {
               </div>
             </motion.div>
           ))}
+        </div>
+
+        {/* --- RESTORED SHOP ALL BUTTON --- */}
+        <div className="flex justify-center mt-12">
+          <Link
+            href="/shop"
+            className={`${orbitron.className} group relative px-12 py-3 border border-white text-white text-[14px] tracking-[0.1em] transition-all duration-300 hover:bg-white hover:text-black`}
+          >
+            Shop All
+          </Link>
         </div>
       </div>
     </section>
