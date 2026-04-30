@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Roboto_Mono, Orbitron } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer"; // 1. Import Footer
 
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
@@ -25,9 +26,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${robotoMono.variable} ${orbitron.variable}`}>
-      <body className="bg-[#0a0a0c] text-white antialiased">
+      <body className="bg-[#0a0a0c] text-white antialiased flex flex-col min-h-screen">
         <Navbar />
-        {children}
+        <main className="flex-grow">{children}</main>
+        <Footer /> {/* 2. Place Footer here */}
       </body>
     </html>
   );

@@ -1,7 +1,8 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ShoppingBag, Plus, Minus, Trash2 } from "lucide-react";
+import { X, ShoppingBag, Plus, Minus, Trash2, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect } from "react";
 import { useCartStore } from "@/store/useCartStore";
 
@@ -140,14 +141,23 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                 </span>
               </div>
 
-              <button
-                disabled={items.length === 0}
-                className="w-full bg-white text-black hover:bg-[#02A3DC] hover:text-white py-4 transition-all duration-300 disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-black"
+              <Link
+                href="/checkout"
+                onClick={onClose}
+                className={`w-full py-4 transition-all duration-300 flex items-center justify-center gap-3 group ${
+                  items.length === 0
+                    ? "bg-zinc-800 text-zinc-500 pointer-events-none"
+                    : "bg-white text-black hover:bg-[#02A3DC] hover:text-white"
+                }`}
               >
                 <span className="text-[10px] uppercase font-bold tracking-[0.3em]">
                   Initialize Checkout
                 </span>
-              </button>
+                <ArrowRight
+                  size={14}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </Link>
             </div>
           </motion.div>
         </>
