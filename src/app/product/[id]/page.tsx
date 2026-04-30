@@ -95,17 +95,14 @@ export default async function ProductPage({
                 </button>
               </Link>
 
-              {/* ADD TO CART - RESTORED WITH ORIGINAL STYLING */}
+              {/* ADD TO CART - String only, no nested button */}
               <AddToCartButton
                 id={product.id}
                 name={product.name}
                 price={getNumericPrice(product.price)}
                 image={product.img}
               >
-                {/* This allows you to keep your custom button design inside the logic wrapper */}
-                <button className="w-full bg-white text-black font-bold py-4 uppercase tracking-widest text-sm hover:opacity-80 transition-all cursor-pointer">
-                  Add to cart
-                </button>
+                Add to cart
               </AddToCartButton>
             </div>
 

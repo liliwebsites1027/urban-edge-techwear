@@ -41,9 +41,8 @@ export default function AddToCartButton({
     return (
       <button
         onClick={handleToggleCart}
-        // Using h-[52px] instead of py-4 to prevent height jumping
-        // Using leading-none to keep text perfectly centered
-        className="w-full h-[52px] bg-white text-black font-bold uppercase tracking-widest text-sm hover:opacity-80 transition-all cursor-pointer flex items-center justify-center gap-2 leading-none"
+        // Fixed height (h-[52px]) prevents height jump when icon/text changes
+        className="w-full h-[52px] bg-white text-black font-bold uppercase tracking-widest text-sm hover:opacity-80 transition-all cursor-pointer flex items-center justify-center gap-2 leading-none border-none outline-none"
       >
         {isInCart ? (
           <>
