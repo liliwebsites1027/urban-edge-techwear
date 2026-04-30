@@ -15,12 +15,16 @@ export default function Navbar() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const totalItems = useCartStore((state) => state.totalItems());
 
+  // Keep this for the Logo click if you want it to scroll up on home,
+  // but Link is safer for general navigation.
   const scrollToTop = (e: React.MouseEvent) => {
-    e.preventDefault();
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    if (window.location.pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
   };
 
   return (
@@ -28,7 +32,8 @@ export default function Navbar() {
       <nav className="fixed top-0 w-full z-50 bg-transparent transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
           {/* Logo Section */}
-          <div
+          <Link
+            href="/"
             className="flex flex-col items-start select-none cursor-pointer"
             onClick={scrollToTop}
           >
@@ -46,17 +51,19 @@ export default function Navbar() {
             >
               Urban Edge
             </span>
-          </div>
+          </Link>
 
           {/* Navigation Links */}
           <div className="flex items-center gap-10">
             <div className="hidden md:flex items-center gap-12 font-sans text-[13px] font-medium text-white/70">
-              <button
-                onClick={scrollToTop}
-                className="hover:text-[#02A3DC] cursor-pointer transition-colors tracking-wide uppercase outline-none"
+              {/* FIXED: Changed button to Link */}
+              <Link
+                href="/"
+                className="hover:text-[#02A3DC] transition-colors tracking-wide uppercase"
               >
                 Home
-              </button>
+              </Link>
+
               <Link
                 href="/about"
                 className="hover:text-[#02A3DC] transition-colors tracking-wide uppercase"
