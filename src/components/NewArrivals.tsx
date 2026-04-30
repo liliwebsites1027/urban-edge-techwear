@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link"; // 1. Import Link
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Orbitron, Roboto_Mono } from "next/font/google";
 import { SlidersHorizontal, Filter } from "lucide-react";
@@ -41,10 +41,6 @@ export default function NewArrivals() {
     "sort" | "filter" | null
   >(null);
 
-  const toggleDropdown = (type: "sort" | "filter") => {
-    setActiveDropdown(activeDropdown === type ? null : type);
-  };
-
   return (
     <section className="bg-[#221036] py-16 px-6 relative">
       <div className="max-w-7xl mx-auto">
@@ -55,16 +51,12 @@ export default function NewArrivals() {
           >
             New Arrivals
           </h2>
-
-          <div className="flex gap-4 relative">
-            {/* Filter and Sort Buttons (Omitted for brevity, kept same as your original) */}
-          </div>
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Changed grid-cols-1 sm:grid-cols-2 to simply grid-cols-2 for mobile/tablet */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
           {arrivals.map((item) => (
-            // 2. Wrap with Link component using item.id
             <Link
               key={item.id}
               href={`/product/${item.id}`}
@@ -82,14 +74,14 @@ export default function NewArrivals() {
                 </div>
 
                 <div className="mt-5 flex flex-col gap-1">
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1 sm:gap-0">
                     <h3
-                      className={`${roboto.className} text-[11px] text-white uppercase tracking-wider font-medium`}
+                      className={`${roboto.className} text-[10px] md:text-[11px] text-white uppercase tracking-wider font-medium`}
                     >
                       {item.name}
                     </h3>
                     <span
-                      className={`${roboto.className} text-[11px] text-[#02A3DC] font-bold`}
+                      className={`${roboto.className} text-[10px] md:text-[11px] text-[#02A3DC] font-bold`}
                     >
                       {item.price}
                     </span>

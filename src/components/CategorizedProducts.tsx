@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link"; // Added Link
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Orbitron, Roboto_Mono } from "next/font/google";
 
@@ -55,15 +55,15 @@ export default function CategorizedProducts() {
   };
 
   return (
-    <section className="bg-[#0a0a0c] py-20 px-6 overflow-hidden">
+    <section className="bg-[#0a0a0c] py-20 px-4 md:px-6 overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        {/* Navigation Labels */}
-        <div className="flex gap-12 mb-16 border-b border-white/5 pb-4">
+        {/* Navigation Labels - Added overflow-x-auto for better mobile navigation */}
+        <div className="flex gap-8 md:gap-12 mb-16 border-b border-white/5 pb-4 overflow-x-auto no-scrollbar whitespace-nowrap">
           {INITIAL_DATA.map((cat) => (
             <button
               key={cat.id}
               onClick={() => handleReorder(cat.id)}
-              className={`${orbitron.className} cursor-pointer text-xl md:text-2xl uppercase tracking-widest transition-all duration-300 relative pb-4 ${
+              className={`${orbitron.className} cursor-pointer text-lg md:text-2xl uppercase tracking-widest transition-all duration-300 relative pb-4 shrink-0 ${
                 activeTab === cat.id
                   ? "text-white"
                   : "text-white/30 hover:text-white/60"
@@ -81,7 +81,7 @@ export default function CategorizedProducts() {
         </div>
 
         {/* Rows of Products */}
-        <div className="flex flex-col gap-20">
+        <div className="flex flex-col gap-12 md:gap-20">
           <AnimatePresence mode="popLayout">
             {categories.map((category) => (
               <motion.div
@@ -93,9 +93,9 @@ export default function CategorizedProducts() {
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 className="w-full"
               >
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* 2 columns for mobile/tablet, 4 columns for desktop (lg) */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                   {category.products.map((product) => (
-                    /* Wrapped with Link for navigation */
                     <Link
                       href={`/product/${product.id}`}
                       key={product.id}
@@ -106,17 +106,17 @@ export default function CategorizedProducts() {
                           src={product.img}
                           alt={product.name}
                           fill
-                          className="object-contain p-6 transition-transform duration-500 group-hover:scale-110"
+                          className="object-contain p-4 md:p-6 transition-transform duration-500 group-hover:scale-110"
                         />
                       </div>
-                      <div className="mt-4 flex justify-between items-center">
+                      <div className="mt-3 md:mt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
                         <h4
-                          className={`${roboto.className} text-[12px] text-white/80 uppercase tracking-tighter`}
+                          className={`${roboto.className} text-[10px] md:text-[12px] text-white/80 uppercase tracking-tighter truncate w-full sm:w-auto`}
                         >
                           {product.name}
                         </h4>
                         <span
-                          className={`${roboto.className} text-[12px] text-[#02A3DC] font-bold`}
+                          className={`${roboto.className} text-[10px] md:text-[12px] text-[#02A3DC] font-bold`}
                         >
                           {product.price}
                         </span>
