@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link"; // Added Link
 import { motion, Variants, BezierDefinition } from "framer-motion";
 import { Roboto_Mono, Orbitron } from "next/font/google";
 import AddToCartButton from "./AddToCartButton";
@@ -70,27 +71,35 @@ export default function ProductOfMonth() {
             <motion.div
               key={item.id}
               variants={itemVariants}
-              className="flex flex-col group cursor-pointer"
+              className="flex flex-col group"
             >
+              {/* Image/Video Container with Link */}
               <div className="relative aspect-square overflow-hidden rounded-sm mb-6 border border-white/10 group-hover:border-[#02A3DC] transition-all duration-700 group-hover:shadow-[0_0_50px_rgba(2,163,220,0.8)]">
-                {item.type === "image" ? (
-                  <Image
-                    src={item.src}
-                    alt={item.title}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-1000"
-                  />
-                ) : (
-                  <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
-                  >
-                    <source src={item.src} type="video/mp4" />
-                  </video>
-                )}
+                <Link
+                  href={`/product/${item.id}`}
+                  className="block w-full h-full cursor-pointer"
+                >
+                  {item.type === "image" ? (
+                    <Image
+                      src={item.src}
+                      alt={item.title}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-1000"
+                    />
+                  ) : (
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                    >
+                      <source src={item.src} type="video/mp4" />
+                    </video>
+                  )}
+                </Link>
+
+                {/* Button stays clickable separately */}
                 <AddToCartButton
                   id={item.id}
                   name={item.title}
@@ -98,7 +107,12 @@ export default function ProductOfMonth() {
                   image={item.src}
                 />
               </div>
-              <div className="space-y-2">
+
+              {/* Text Info wrapped in Link */}
+              <Link
+                href={`/product/${item.id}`}
+                className="space-y-2 cursor-pointer"
+              >
                 <div className="flex justify-between items-baseline border-b border-white/10 pb-2">
                   <h3
                     className={`${orbitron.className} text-[13px] text-white uppercase tracking-wider group-hover:text-[#02A3DC] transition-colors`}
@@ -116,7 +130,7 @@ export default function ProductOfMonth() {
                 >
                   {item.desc}
                 </p>
-              </div>
+              </Link>
             </motion.div>
           ))}
         </div>

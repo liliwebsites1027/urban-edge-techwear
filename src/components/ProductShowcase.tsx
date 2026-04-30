@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link"; // Added Link
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Roboto_Mono, Orbitron } from "next/font/google";
-import { ArrowRight } from "lucide-react"; // Added for the icon
+import { ArrowRight } from "lucide-react";
 import AddToCartButton from "./AddToCartButton";
 
 const robotoMono = Roboto_Mono({ subsets: ["latin"] });
@@ -52,17 +52,23 @@ export default function ProductShowcase() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           {products.map((product) => (
-            <motion.div
-              key={product.id}
-              className="group cursor-pointer relative"
-            >
+            <motion.div key={product.id} className="group relative">
+              {/* Image Container */}
               <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-zinc-900 mb-5 border border-white/5 transition-all duration-500 group-hover:border-[#02A3DC] group-hover:shadow-[0_0_50px_rgba(2,163,220,0.4)]">
-                <Image
-                  src={product.img}
-                  alt={product.name}
-                  fill
-                  className="object-cover opacity-90 transition-opacity duration-500"
-                />
+                {/* Wrapped Image in Link */}
+                <Link
+                  href={`/product/${product.id}`}
+                  className="block w-full h-full cursor-pointer"
+                >
+                  <Image
+                    src={product.img}
+                    alt={product.name}
+                    fill
+                    className="object-cover opacity-90 transition-opacity duration-500 group-hover:scale-105 transition-transform duration-700"
+                  />
+                </Link>
+
+                {/* AddToCart stays outside the Link to prevent accidental navigation */}
                 <AddToCartButton
                   id={product.id}
                   name={product.name}
@@ -71,10 +77,15 @@ export default function ProductShowcase() {
                   size="sm"
                 />
               </div>
-              <div className="flex flex-col gap-1">
+
+              {/* Text Details wrapped in Link */}
+              <Link
+                href={`/product/${product.id}`}
+                className="flex flex-col gap-1 cursor-pointer"
+              >
                 <div className="flex justify-between items-start">
                   <h3
-                    className={`${robotoMono.className} text-[12px] text-white uppercase tracking-tighter font-bold flex-1`}
+                    className={`${robotoMono.className} text-[12px] text-white uppercase tracking-tighter font-bold flex-1 group-hover:text-[#02A3DC] transition-colors`}
                   >
                     {product.name}
                   </h3>
@@ -87,12 +98,11 @@ export default function ProductShowcase() {
                 <p className="text-[10px] text-gray-500 uppercase tracking-widest font-medium mt-1">
                   {product.desc}
                 </p>
-              </div>
+              </Link>
             </motion.div>
           ))}
         </div>
 
-        {/* --- RESTORED SHOP ALL BUTTON --- */}
         <div className="flex justify-center mt-12">
           <Link
             href="/shop"

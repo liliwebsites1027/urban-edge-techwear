@@ -1,6 +1,5 @@
 "use client";
-import { useState } from "react";
-import { ShoppingCart, Check, CheckCheck } from "lucide-react";
+import { Check, CheckCheck, ShoppingCart } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
 
 interface AddToCartButtonProps {
@@ -9,6 +8,7 @@ interface AddToCartButtonProps {
   price: number;
   image: string;
   size?: "sm" | "md";
+  children?: React.ReactNode;
 }
 
 export default function AddToCartButton({
@@ -17,48 +17,65 @@ export default function AddToCartButton({
   price,
   image,
   size = "md",
+  children,
 }: AddToCartButtonProps) {
   const addItem = useCartStore((state) => state.addItem);
+  const removeItem = useCartStore((state) => state.removeItem);
+  const items = useCartStore((state) => state.items);
 
-  // Check if this specific ID is already in the cart items array
-  const isInCart = useCartStore((state) =>
-    state.items.some((item) => item.id === id),
-  );
+  const isInCart = items.some((item) => item.id === id);
 
-  const [justAdded, setJustAdded] = useState(false);
-
-  const handleAdd = (e: React.MouseEvent) => {
+  const handleToggleCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    addItem({ id, name, price, image });
-
-    // Trigger the "Just Added" animation/state
-    setJustAdded(true);
-    setTimeout(() => setJustAdded(false), 1500);
+    if (isInCart) {
+      removeItem(id);
+    } else {
+      addItem({ id, name, price, image });
+    }
   };
 
+  // PRODUCT DETAIL PAGE VERSION (Large White Button)
+  if (children) {
+    return (
+      <button
+        onClick={handleToggleCart}
+        // Using h-[52px] instead of py-4 to prevent height jumping
+        // Using leading-none to keep text perfectly centered
+        className="w-full h-[52px] bg-white text-black font-bold uppercase tracking-widest text-sm hover:opacity-80 transition-all cursor-pointer flex items-center justify-center gap-2 leading-none"
+      >
+        {isInCart ? (
+          <>
+            <Check size={16} className="shrink-0" />
+            <span>Added to cart</span>
+          </>
+        ) : (
+          <span className="flex items-center justify-center gap-2">
+            {children}
+          </span>
+        )}
+      </button>
+    );
+  }
+
+  // GRID/COLLECTION VERSION (Floating Icon)
   const iconSize = size === "sm" ? 16 : 18;
   const padding = size === "sm" ? "p-2.5" : "p-3";
   const position = size === "sm" ? "top-3 right-3" : "top-4 right-4";
 
   return (
     <button
-      onClick={handleAdd}
+      onClick={handleToggleCart}
       className={`absolute ${position} z-10 ${padding} rounded-full transition-all duration-300 backdrop-blur-sm shadow-xl border
         ${
-          justAdded
-            ? "bg-green-500 border-green-500 text-white scale-110"
-            : isInCart
-              ? "bg-[#02A3DC] border-[#02A3DC] text-white" // Different look if already in cart
-              : "bg-black/60 border-white/20 text-white hover:bg-[#02A3DC] hover:border-[#02A3DC]"
+          isInCart
+            ? "bg-[#02A3DC] border-[#02A3DC] text-white"
+            : "bg-black/60 border-white/20 text-white hover:bg-[#02A3DC] hover:border-[#02A3DC]"
         }`}
-      aria-label={isInCart ? `${name} is in cart` : `Add ${name} to cart`}
     >
-      {justAdded ? (
-        <Check size={iconSize} />
-      ) : isInCart ? (
-        <CheckCheck size={iconSize} /> // "Double check" indicates it's already there
+      {isInCart ? (
+        <CheckCheck size={iconSize} />
       ) : (
         <ShoppingCart size={iconSize} />
       )}

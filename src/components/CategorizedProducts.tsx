@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link"; // Added Link
 import { motion, AnimatePresence } from "framer-motion";
 import { Orbitron, Roboto_Mono } from "next/font/google";
 
@@ -49,7 +50,6 @@ export default function CategorizedProducts() {
     const itemToMove = categories.find((cat) => cat.id === id);
     if (!itemToMove) return;
 
-    // Filter out the selected item and move it to the front
     const remaining = categories.filter((cat) => cat.id !== id);
     setCategories([itemToMove, ...remaining]);
   };
@@ -95,7 +95,12 @@ export default function CategorizedProducts() {
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   {category.products.map((product) => (
-                    <div key={product.id} className="group">
+                    /* Wrapped with Link for navigation */
+                    <Link
+                      href={`/product/${product.id}`}
+                      key={product.id}
+                      className="group cursor-pointer"
+                    >
                       <div className="relative aspect-square bg-[#111214] border border-white/5 overflow-hidden transition-all duration-500 group-hover:border-[#02A3DC] group-hover:shadow-[0_15px_40px_-10px_rgba(2,163,220,0.4)]">
                         <Image
                           src={product.img}
@@ -116,7 +121,7 @@ export default function CategorizedProducts() {
                           {product.price}
                         </span>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </motion.div>
