@@ -4,19 +4,34 @@ import Link from "next/link";
 import Image from "next/image";
 import { Search } from "lucide-react";
 import { Roboto_Mono } from "next/font/google";
+import { useCartStore } from "@/store/useCartStore";
 import SearchOverlay from "./SearchOverlay";
+import CartSidebar from "./CartSidebar";
 
 const robotoMono = Roboto_Mono({ subsets: ["latin"] });
 
 export default function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const totalItems = useCartStore((state) => state.totalItems());
+
+  const scrollToTop = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <>
       <nav className="fixed top-0 w-full z-50 bg-transparent transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
           {/* Logo Section */}
-          <div className="flex flex-col items-start select-none">
+          <div
+            className="flex flex-col items-start select-none cursor-pointer"
+            onClick={scrollToTop}
+          >
             <div className="relative w-10 h-10">
               <Image
                 src="/urbanedge-logo.png"
@@ -36,24 +51,29 @@ export default function Navbar() {
           {/* Navigation Links */}
           <div className="flex items-center gap-10">
             <div className="hidden md:flex items-center gap-12 font-sans text-[13px] font-medium text-white/70">
-              <Link
-                href="/"
-                className="hover:text-[#02A3DC] transition-colors tracking-wide uppercase"
+              <button
+                onClick={scrollToTop}
+                className="hover:text-[#02A3DC] cursor-pointer transition-colors tracking-wide uppercase outline-none"
               >
                 Home
-              </Link>
+              </button>
               <Link
                 href="/about"
                 className="hover:text-[#02A3DC] transition-colors tracking-wide uppercase"
               >
                 About Us
               </Link>
-              <Link
-                href="/cart"
-                className="hover:text-[#02A3DC] transition-colors tracking-wide uppercase"
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="hover:text-[#02A3DC] cursor-pointer transition-colors tracking-wide uppercase flex items-center gap-2 outline-none"
               >
-                My Cart
-              </Link>
+                My Cart{" "}
+                <span
+                  className={`text-[10px] font-bold ${totalItems > 0 ? "text-[#02A3DC]" : "opacity-50"}`}
+                >
+                  ({totalItems})
+                </span>
+              </button>
             </div>
 
             {/* Icon-only Search Button */}
@@ -71,11 +91,12 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* The Search Overlay Component */}
       <SearchOverlay
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
       />
+
+      <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );
 }

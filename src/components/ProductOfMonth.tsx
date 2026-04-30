@@ -2,48 +2,42 @@
 import Image from "next/image";
 import { motion, Variants, BezierDefinition } from "framer-motion";
 import { Roboto_Mono, Orbitron } from "next/font/google";
+import AddToCartButton from "./AddToCartButton";
 
 const robotoMono = Roboto_Mono({ subsets: ["latin"] });
 const orbitron = Orbitron({ subsets: ["latin"] });
-
-// Define the custom ease as a typed BezierDefinition
 const customEase: BezierDefinition = [0.22, 1, 0.36, 1];
 
 const featured = [
   {
-    id: 1,
+    id: "f1",
     type: "image",
     src: "/jacket.jpeg",
     title: "STRATOSHELL-X Jacket",
-    desc: "Engineered for Motion. Built for Weather.",
-    price: "$450.00",
+    desc: "Engineered for Motion.",
+    price: 450.0,
   },
   {
-    id: 2,
+    id: "f2",
     type: "video",
     src: "/watch.mp4",
     title: "AEROTIME-X Tactical Chronograph",
-    desc: "Precision Built for the Urban Grid.",
-    price: "$890.00",
+    desc: "Precision Built.",
+    price: 890.0,
   },
   {
-    id: 3,
+    id: "f3",
     type: "image",
     src: "/frames.jpeg",
     title: "NEOVISOR-X Modular Frames",
-    desc: "Vision Built for the Digital Frontier.",
-    price: "$210.00",
+    desc: "Vision Built.",
+    price: 210.0,
   },
 ];
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
+  visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
 };
 
 const itemVariants: Variants = {
@@ -51,21 +45,18 @@ const itemVariants: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.8,
-      ease: customEase,
-    },
+    transition: { duration: 0.8, ease: customEase },
   },
 };
 
 export default function ProductOfMonth() {
   return (
-    <section className="bg-[#1a1b1e] py-24 px-6 border-y border-white/5 overflow-hidden">
+    <section className="bg-[#1a1b1e] py-24 px-6 border-y border-white/5">
       <motion.div
         className="max-w-7xl mx-auto"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: true }}
         variants={containerVariants}
       >
         <motion.h2
@@ -74,7 +65,6 @@ export default function ProductOfMonth() {
         >
           Product of the Month
         </motion.h2>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {featured.map((item) => (
             <motion.div
@@ -82,13 +72,13 @@ export default function ProductOfMonth() {
               variants={itemVariants}
               className="flex flex-col group cursor-pointer"
             >
-              <div className="relative aspect-square overflow-hidden bg-black/40 rounded-sm mb-6 border border-white/10 group-hover:border-[#02A3DC]/50 transition-all duration-700 ease-out shadow-2xl">
+              <div className="relative aspect-square overflow-hidden rounded-sm mb-6 border border-white/10 group-hover:border-[#02A3DC] transition-all duration-700 group-hover:shadow-[0_0_50px_rgba(2,163,220,0.8)]">
                 {item.type === "image" ? (
                   <Image
                     src={item.src}
                     alt={item.title}
                     fill
-                    className="object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000 ease-in-out"
+                    className="object-cover group-hover:scale-110 transition-transform duration-1000"
                   />
                 ) : (
                   <video
@@ -96,37 +86,37 @@ export default function ProductOfMonth() {
                     loop
                     muted
                     playsInline
-                    className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000 ease-in-out"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                   >
                     <source src={item.src} type="video/mp4" />
                   </video>
                 )}
-                <div className="absolute inset-0 bg-[#02A3DC]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                <AddToCartButton
+                  id={item.id}
+                  name={item.title}
+                  price={item.price}
+                  image={item.src}
+                />
               </div>
-
-              <motion.div
-                className="space-y-2"
-                whileHover={{ x: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
+              <div className="space-y-2">
                 <div className="flex justify-between items-baseline border-b border-white/10 pb-2">
                   <h3
-                    className={`${orbitron.className} text-[13px] text-white uppercase tracking-wider group-hover:text-[#02A3DC] transition-colors duration-300`}
+                    className={`${orbitron.className} text-[13px] text-white uppercase tracking-wider group-hover:text-[#02A3DC] transition-colors`}
                   >
                     {item.title}
                   </h3>
                   <span
                     className={`${robotoMono.className} text-[12px] text-[#02A3DC] font-bold`}
                   >
-                    {item.price}
+                    ${item.price.toFixed(2)}
                   </span>
                 </div>
                 <p
-                  className={`${robotoMono.className} text-[10px] text-gray-400 uppercase tracking-widest leading-relaxed`}
+                  className={`${robotoMono.className} text-[10px] text-gray-400 uppercase tracking-widest`}
                 >
                   {item.desc}
                 </p>
-              </motion.div>
+              </div>
             </motion.div>
           ))}
         </div>

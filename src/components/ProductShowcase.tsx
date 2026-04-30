@@ -2,37 +2,38 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Roboto_Mono, Orbitron } from "next/font/google";
+import AddToCartButton from "./AddToCartButton";
 
 const robotoMono = Roboto_Mono({ subsets: ["latin"] });
 const orbitron = Orbitron({ subsets: ["latin"] });
 
 const products = [
   {
-    id: 1,
+    id: "p1",
     name: "NeuroShield Lite Hoodie",
-    desc: "Thermal regulation with ultra-light fabric.",
-    price: "$185.00",
+    desc: "Thermal regulation.",
+    price: 185.0,
     img: "/image1.png",
   },
   {
-    id: 2,
+    id: "p2",
     name: "AeroGuard Tactical Hoodie",
-    desc: "Wind-resistant shell with modular pockets.",
-    price: "$210.00",
+    desc: "Wind-resistant.",
+    price: 210.0,
     img: "/image2.png",
   },
   {
-    id: 3,
+    id: "p3",
     name: "CryoShell Expedition Hoodie",
-    desc: "Engineered for sub-zero urban environments.",
-    price: "$245.00",
+    desc: "Sub-zero tech.",
+    price: 245.0,
     img: "/image3.png",
   },
   {
-    id: 4,
+    id: "p4",
     name: "StealthCore Urban Hoodie",
-    desc: "Water-repellent finish for daily versatility.",
-    price: "$160.00",
+    desc: "Water-repellent.",
+    price: 160.0,
     img: "/image4.png",
   },
 ];
@@ -46,52 +47,46 @@ export default function ProductShowcase() {
         >
           Discover More in our Techwear Winter Collection
         </h2>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           {products.map((product) => (
             <motion.div
               key={product.id}
               className="group cursor-pointer relative"
             >
-              {/* Product Image Container with Hover Glow */}
-              <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-zinc-900 mb-5 transition-all duration-500 group-hover:shadow-[0_0_50px_rgba(2,163,220,0.8)] group-hover:ring-2 group-hover:ring-[#02A3DC]">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-zinc-900 mb-5 border border-white/5 transition-all duration-500 group-hover:border-[#02A3DC] group-hover:shadow-[0_0_50px_rgba(2,163,220,0.8)]">
                 <Image
                   src={product.img}
                   alt={product.name}
                   fill
-                  className="object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500"
+                  className="object-cover opacity-90 transition-opacity duration-500"
+                />
+                <AddToCartButton
+                  id={product.id}
+                  name={product.name}
+                  price={product.price}
+                  image={product.img}
+                  size="sm"
                 />
               </div>
-
-              {/* Product Metadata */}
               <div className="flex flex-col gap-1">
                 <div className="flex justify-between items-start">
                   <h3
-                    className={`${robotoMono.className} text-[12px] text-white uppercase tracking-tighter font-bold leading-tight flex-1`}
+                    className={`${robotoMono.className} text-[12px] text-white uppercase tracking-tighter font-bold flex-1`}
                   >
                     {product.name}
                   </h3>
                   <span
                     className={`${robotoMono.className} text-[12px] text-[#02A3DC] font-bold`}
                   >
-                    {product.price}
+                    ${product.price.toFixed(2)}
                   </span>
                 </div>
-
                 <p className="text-[10px] text-gray-500 uppercase tracking-widest font-medium mt-1">
                   {product.desc}
                 </p>
               </div>
             </motion.div>
           ))}
-        </div>
-
-        <div className="flex justify-center">
-          <button
-            className={`${orbitron.className} border border-white/20 px-16 py-3 text-sm uppercase tracking-[0.3em] text-white hover:bg-white hover:text-black hover:border-white transition-all duration-500`}
-          >
-            Shop All
-          </button>
         </div>
       </div>
     </section>
