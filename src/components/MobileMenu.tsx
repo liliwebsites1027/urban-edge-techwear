@@ -79,7 +79,6 @@ export default function MobileMenu({
                   >
                     HOME <ChevronRight size={16} className="text-white/20" />
                   </Link>
-                  {/* Added Shop Link */}
                   <Link
                     href="/shop"
                     onClick={onClose}
@@ -107,39 +106,6 @@ export default function MobileMenu({
                       [{totalItems}]
                     </span>
                   </button>
-                </div>
-              </div>
-
-              <div className="space-y-6">
-                <p
-                  className={`${roboto.className} text-[9px] text-white/30 uppercase tracking-[0.5em]`}
-                >
-                  Collections
-                </p>
-                <div
-                  className={`${roboto.className} flex flex-col gap-5 text-xs text-white/50 tracking-widest`}
-                >
-                  <Link
-                    href="/search?q=cyber"
-                    onClick={onClose}
-                    className="hover:text-white transition-colors uppercase italic"
-                  >
-                    Cyber
-                  </Link>
-                  <Link
-                    href="/search?q=tactical"
-                    onClick={onClose}
-                    className="hover:text-white transition-colors uppercase italic"
-                  >
-                    Tactical
-                  </Link>
-                  <Link
-                    href="/search?q=alpha"
-                    onClick={onClose}
-                    className="hover:text-white transition-colors uppercase italic"
-                  >
-                    Alpha
-                  </Link>
                 </div>
               </div>
             </div>
