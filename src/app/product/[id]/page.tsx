@@ -44,7 +44,7 @@ export default function ProductPage({
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-24">
           {/* MEDIA DISPLAY */}
-          <div className="relative aspect-[4/5] sm:aspect-square bg-[#111214] border border-white/5 flex items-center justify-center overflow-hidden">
+          <div className="relative aspect-4/5 sm:aspect-square bg-[#111214] border border-white/5 flex items-center justify-center overflow-hidden">
             {isVideo ? (
               <video
                 autoPlay

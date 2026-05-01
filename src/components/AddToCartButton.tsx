@@ -42,7 +42,7 @@ export default function AddToCartButton({
       <button
         onClick={handleToggleCart}
         // Fixed height (h-[52px]) prevents height jump when icon/text changes
-        className="w-full h-[52px] bg-white text-black font-bold uppercase tracking-widest text-sm hover:opacity-80 transition-all cursor-pointer flex items-center justify-center gap-2 leading-none border-none outline-none"
+        className="w-full h-13 bg-white text-black font-bold uppercase tracking-widest text-sm hover:opacity-80 transition-all cursor-pointer flex items-center justify-center gap-2 leading-none border-none outline-none"
       >
         {isInCart ? (
           <>

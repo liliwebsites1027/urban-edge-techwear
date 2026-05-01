@@ -79,7 +79,7 @@ export default function SearchWithSuggestions() {
 
       {/* SUGGESTIONS DROPDOWN */}
       {showDropdown && (
-        <div className="absolute z-[100] w-full mt-2 bg-[#0a0a0c] border border-white/10 shadow-2xl overflow-hidden">
+        <div className="absolute z-100 w-full mt-2 bg-[#0a0a0c] border border-white/10 shadow-2xl overflow-hidden">
           {suggestions.map((product) => (
             <Link
               key={product.id}
@@ -90,7 +90,7 @@ export default function SearchWithSuggestions() {
               }}
               className="flex items-center gap-4 p-3 hover:bg-white/5 transition-colors border-b border-white/5 last:border-0"
             >
-              <div className="relative w-12 h-12 bg-[#111214] border border-white/5 flex-shrink-0">
+              <div className="relative w-12 h-12 bg-[#111214] border border-white/5 shrink-0">
                 <Image
                   src={product.img}
                   alt={product.name}
@@ -102,7 +102,7 @@ export default function SearchWithSuggestions() {
                 <span className="text-[11px] font-bold text-white uppercase tracking-wider">
                   {product.name}
                 </span>
-                <span className="text-[9px] text-[#02A3DC] uppercase tracking-[0.1em]">
+                <span className="text-[9px] text-[#02A3DC] uppercase tracking-widest">
                   {product.category}
                 </span>
               </div>
@@ -116,7 +116,7 @@ export default function SearchWithSuggestions() {
 
           <button
             onClick={() => router.push(`/search?q=${query}`)}
-            className="w-full p-3 text-[10px] text-center text-white/40 uppercase hover:text-[#02A3DC] transition-colors border-t border-white/5 bg-white/[0.02]"
+            className="w-full p-3 text-[10px] text-center text-white/40 uppercase hover:text-[#02A3DC] transition-colors border-t border-white/5 bg-white/2"
           >
             View all results for &quot;{query}&quot;
           </button>

@@ -21,20 +21,20 @@ export default function ShopHero() {
           Changed from "via-[#0a0a0c]/40" to "via-transparent" 
           and adjusted "from-90%" to keep the black shadow strictly at the bottom.
       */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] from-5% via-transparent to-transparent opacity-80" />
+      <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0c] from-5% via-transparent to-transparent opacity-80" />
 
       {/* Content Container */}
       <div className="relative h-full max-w-7xl mx-auto px-6 flex flex-col justify-end pb-16">
         <div className="space-y-1">
           {/* Reduced size from text-4xl/7xl to text-2xl/5xl */}
           <h1
-            className={`${orbitron.className} text-2xl md:text-4xl lg:text-5xl tracking-[0.1em] uppercase text-[#02A3DC] leading-tight`}
+            className={`${orbitron.className} text-2xl md:text-4xl lg:text-5xl tracking-widest uppercase text-[#02A3DC] leading-tight`}
           >
             Techwear Collection <span className="text-white">2026</span>
           </h1>
 
           {/* Thinner tactical line */}
-          <div className="h-[1px] w-20 bg-[#02A3DC] mt-4 opacity-50" />
+          <div className="h-px w-20 bg-[#02A3DC] mt-4 opacity-50" />
         </div>
       </div>
 

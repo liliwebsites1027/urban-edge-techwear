@@ -128,7 +128,7 @@ export default function CheckoutPage() {
                 Transaction Details
               </h2>
 
-              <div className="space-y-6 mb-8 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
+              <div className="space-y-6 mb-8 max-h-62.5 overflow-y-auto pr-2 custom-scrollbar">
                 {items.map((item) => (
                   <div key={item.id} className="flex gap-4">
                     <div className="relative w-12 h-12 bg-white/10 shrink-0">

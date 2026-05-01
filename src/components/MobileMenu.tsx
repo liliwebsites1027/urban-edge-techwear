@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { X, ChevronRight, Globe, Share2 } from "lucide-react"; // Replaced social icons with generic ones
+import { X, ChevronRight } from "lucide-react";
 import { Orbitron, Roboto_Mono } from "next/font/google";
 
 const orbitron = Orbitron({ subsets: ["latin"] });
@@ -24,8 +24,7 @@ export default function MobileMenu({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[70] md:hidden">
-          {/* Backdrop */}
+        <div className="fixed inset-0 z-70 md:hidden">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -34,7 +33,6 @@ export default function MobileMenu({
             className="absolute inset-0 bg-black/80 backdrop-blur-md"
           />
 
-          {/* Sidebar Panel */}
           <motion.div
             initial={{ x: "-100%" }}
             animate={{ x: 0 }}
@@ -42,7 +40,6 @@ export default function MobileMenu({
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="relative w-[85%] max-w-sm h-full bg-[#0a0a0c] border-r border-white/10 flex flex-col shadow-2xl"
           >
-            {/* Header */}
             <div className="p-6 border-b border-white/5 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Image
@@ -65,9 +62,7 @@ export default function MobileMenu({
               </button>
             </div>
 
-            {/* Scrollable Content */}
             <div className="flex-1 overflow-y-auto py-8 px-8 space-y-10">
-              {/* Navigation Section */}
               <div className="space-y-6">
                 <p
                   className={`${roboto.className} text-[9px] text-white/30 uppercase tracking-[0.5em]`}
@@ -83,6 +78,14 @@ export default function MobileMenu({
                     className="text-white flex items-center justify-between group"
                   >
                     HOME <ChevronRight size={16} className="text-white/20" />
+                  </Link>
+                  {/* Added Shop Link */}
+                  <Link
+                    href="/shop"
+                    onClick={onClose}
+                    className="text-white flex items-center justify-between group"
+                  >
+                    SHOP <ChevronRight size={16} className="text-white/20" />
                   </Link>
                   <Link
                     href="/about"
@@ -107,7 +110,6 @@ export default function MobileMenu({
                 </div>
               </div>
 
-              {/* Collections Section */}
               <div className="space-y-6">
                 <p
                   className={`${roboto.className} text-[9px] text-white/30 uppercase tracking-[0.5em]`}
@@ -121,25 +123,29 @@ export default function MobileMenu({
                     href="/search?q=cyber"
                     onClick={onClose}
                     className="hover:text-white transition-colors uppercase italic"
-                  ></Link>
+                  >
+                    Cyber
+                  </Link>
                   <Link
                     href="/search?q=tactical"
                     onClick={onClose}
                     className="hover:text-white transition-colors uppercase italic"
-                  ></Link>
+                  >
+                    Tactical
+                  </Link>
                   <Link
                     href="/search?q=alpha"
                     onClick={onClose}
                     className="hover:text-white transition-colors uppercase italic"
-                  ></Link>
+                  >
+                    Alpha
+                  </Link>
                 </div>
               </div>
             </div>
 
-            {/* Footer */}
-            <div className="p-8 border-t border-white/5 bg-white/[0.01]">
+            <div className="p-8 border-t border-white/5 bg-white/1">
               <div className="flex gap-6 mb-6">
-                {/* Replaced specific icons with generic text-based social links for better reliability */}
                 <Link
                   href="#"
                   className="text-[10px] font-mono text-white/40 hover:text-[#02A3DC] uppercase tracking-widest transition-colors"

@@ -8,7 +8,7 @@ import { Orbitron } from "next/font/google";
 import { useCartStore } from "@/store/useCartStore";
 import SearchOverlay from "./SearchOverlay";
 import CartSidebar from "./CartSidebar";
-import MobileMenu from "./MobileMenu"; // Assuming this is your new file name
+import MobileMenu from "./MobileMenu";
 
 const orbitron = Orbitron({ subsets: ["latin"] });
 
@@ -78,6 +78,13 @@ export default function Navbar() {
               >
                 Home
               </Link>
+              {/* Added Shop Link */}
+              <Link
+                href="/shop"
+                className="hover:text-[#02A3DC] transition-colors tracking-wide uppercase"
+              >
+                Shop
+              </Link>
               <Link
                 href="/about"
                 className="hover:text-[#02A3DC] transition-colors tracking-wide uppercase"
@@ -116,7 +123,6 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* EXTERNAL COMPONENTS */}
       <MobileMenu
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -40,6 +40,25 @@ export default function NewArrivals() {
   const [activeDropdown, setActiveDropdown] = useState<
     "sort" | "filter" | null
   >(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const toggleDropdown = (type: "sort" | "filter") => {
+    setActiveDropdown(activeDropdown === type ? null : type);
+  };
 
   return (
     <section className="bg-[#221036] py-16 px-6 relative">
@@ -51,10 +70,69 @@ export default function NewArrivals() {
           >
             New Arrivals
           </h2>
+
+          <div className="flex gap-4 relative" ref={dropdownRef}>
+            {/* Filter Toggle */}
+            <button
+              onClick={() => toggleDropdown("filter")}
+              className="flex cursor-pointer items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-#fff hover:text-[#02A3DC] transition-colors"
+            >
+              <Filter size={14} /> Filter
+            </button>
+
+            {/* Sort Toggle */}
+            <button
+              onClick={() => toggleDropdown("sort")}
+              className="flex cursor-pointer items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-#fff hover:text-[#02A3DC] transition-colors"
+            >
+              <SlidersHorizontal size={14} /> Sort
+            </button>
+
+            {/* Dropdown Menu */}
+            <AnimatePresence>
+              {activeDropdown && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute top-full right-0 mt-4 w-48 bg-black/90 border border-white/10 backdrop-blur-xl z-50 p-4 shadow-2xl"
+                >
+                  <div
+                    className={`${roboto.className} flex flex-col gap-3 text-[10px] uppercase tracking-widest text-white/70`}
+                  >
+                    {activeDropdown === "filter" ? (
+                      <>
+                        <button className="text-left hover:text-[#02A3DC]">
+                          All Tech
+                        </button>
+                        <button className="text-left hover:text-[#02A3DC]">
+                          Outerwear
+                        </button>
+                        <button className="text-left hover:text-[#02A3DC]">
+                          Accessories
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button className="text-left hover:text-[#02A3DC]">
+                          Newest
+                        </button>
+                        <button className="text-left hover:text-[#02A3DC]">
+                          Price: Low-High
+                        </button>
+                        <button className="text-left hover:text-[#02A3DC]">
+                          Price: High-Low
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
-        {/* Product Grid */}
-        {/* Changed grid-cols-1 sm:grid-cols-2 to simply grid-cols-2 for mobile/tablet */}
+        {/* Product Grid - 2 columns mobile/tablet, 4 columns desktop */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
           {arrivals.map((item) => (
             <Link
@@ -63,7 +141,7 @@ export default function NewArrivals() {
               className="block group"
             >
               <motion.div className="cursor-pointer">
-                <div className="relative aspect-[4/5] bg-black/20 border border-white/5 overflow-hidden transition-all duration-500 group-hover:border-[#02A3DC] group-hover:shadow-[0_10px_40px_rgba(2,163,220,0.8)]">
+                <div className="relative aspect-4/5 bg-black/20 border border-white/5 overflow-hidden transition-all duration-500 group-hover:border-[#02A3DC] group-hover:shadow-[0_10px_40px_rgba(2,163,220,0.8)]">
                   <Image
                     src={item.img}
                     alt={item.name}
@@ -86,7 +164,7 @@ export default function NewArrivals() {
                       {item.price}
                     </span>
                   </div>
-                  <div className="w-full h-[1px] bg-white/5 mt-2 group-hover:bg-[#02A3DC]/30 transition-colors" />
+                  <div className="w-full h-px bg-white/5 mt-2 group-hover:bg-[#02A3DC]/30 transition-colors" />
                 </div>
               </motion.div>
             </Link>

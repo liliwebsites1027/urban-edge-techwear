@@ -36,7 +36,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/50 z-[60] cursor-pointer"
+            className="fixed inset-0 bg-black/50 z-60 cursor-pointer"
           />
 
           <motion.div
@@ -44,7 +44,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 h-full w-full max-w-md bg-[#0a0a0c] z-[70] shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col border-l border-white/5"
+            className="fixed right-0 top-0 h-full w-full max-w-md bg-[#0a0a0c] z-70 shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col border-l border-white/5"
           >
             {/* Header */}
             <div className="p-6 border-b border-white/5 flex items-center justify-between">

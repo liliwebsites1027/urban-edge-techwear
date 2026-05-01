@@ -73,7 +73,7 @@ export default function CategorizedProducts() {
               {activeTab === cat.id && (
                 <motion.div
                   layoutId="activeTab"
-                  className="absolute bottom-0 left-0 w-full h-[2px] bg-[#02A3DC]"
+                  className="absolute bottom-0 left-0 w-full h-0.5 bg-[#02A3DC]"
                 />
               )}
             </button>

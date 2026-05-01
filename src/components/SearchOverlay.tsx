@@ -49,7 +49,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed top-24 left-0 w-full flex justify-center px-6 z-[40] pointer-events-none">
+        <div className="fixed top-24 left-0 w-full flex justify-center px-6 z-40 pointer-events-none">
           <motion.div
             // THE FIX: Adding a key based on isOpen resets the 'query' state
             // automatically when the overlay re-mounts/toggles.
@@ -75,7 +75,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 className="flex-1 bg-transparent text-gray-900 text-sm outline-none font-sans placeholder:text-gray-400"
               />
               <div className="flex items-center gap-3">
-                <div className="h-4 w-[1px] bg-gray-200" />
+                <div className="h-4 w-1px bg-gray-200" />
                 <button
                   type="button"
                   onClick={onClose}
@@ -100,7 +100,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                       onClick={onClose}
                       className="flex items-center gap-4 p-2 hover:bg-white rounded-md transition-all border border-transparent hover:border-gray-200"
                     >
-                      <div className="relative w-10 h-10 bg-white border border-gray-200 rounded overflow-hidden flex-shrink-0">
+                      <div className="relative w-10 h-10 bg-white border border-gray-200 rounded overflow-hidden shrink-0">
                         <Image
                           src={product.img}
                           alt={product.name}
