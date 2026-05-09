@@ -2,8 +2,9 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { X, ChevronRight } from "lucide-react";
+import { X, ChevronRight, User as UserIcon, LogIn } from "lucide-react";
 import { Orbitron, Roboto_Mono } from "next/font/google";
+import { User } from "@supabase/supabase-js";
 
 const orbitron = Orbitron({ subsets: ["latin"] });
 const roboto = Roboto_Mono({ subsets: ["latin"] });
@@ -13,6 +14,8 @@ interface MobileMenuProps {
   onClose: () => void;
   onOpenCart: () => void;
   totalItems: number;
+  user: User | null;
+  pathname: string;
 }
 
 export default function MobileMenu({
@@ -20,6 +23,8 @@ export default function MobileMenu({
   onClose,
   onOpenCart,
   totalItems,
+  user,
+  pathname,
 }: MobileMenuProps) {
   return (
     <AnimatePresence>
@@ -56,13 +61,46 @@ export default function MobileMenu({
               </div>
               <button
                 onClick={onClose}
-                className="p-2 text-white/40 hover:text-white outline-none cursor-pointer"
+                className="p-2 text-white/40 hover:text-white outline-none"
               >
                 <X size={24} />
               </button>
             </div>
 
             <div className="flex-1 overflow-y-auto py-8 px-8 space-y-10">
+              <div className="space-y-4">
+                <p
+                  className={`${roboto.className} text-[9px] text-white/30 uppercase tracking-[0.5em]`}
+                >
+                  Identity Status
+                </p>
+                <Link
+                  href={user ? "/profile" : `/login?next=${pathname}`}
+                  onClick={onClose}
+                  className="flex items-center gap-4 bg-white/5 p-4 border border-white/10 group hover:border-[#02A3DC] transition-colors"
+                >
+                  <div className="w-10 h-10 bg-white/10 flex items-center justify-center">
+                    {user ? (
+                      <UserIcon size={18} className="text-[#02A3DC]" />
+                    ) : (
+                      <LogIn size={18} className="text-white/40" />
+                    )}
+                  </div>
+                  <div>
+                    <p
+                      className={`${orbitron.className} text-[10px] text-white tracking-widest uppercase`}
+                    >
+                      {user ? "Access Granted" : "Guest Access"}
+                    </p>
+                    <p
+                      className={`${roboto.className} text-[8px] text-[#02A3DC] uppercase tracking-tighter truncate max-w-[150px]`}
+                    >
+                      {user ? user.email : "Initialize Login Sequence"}
+                    </p>
+                  </div>
+                </Link>
+              </div>
+
               <div className="space-y-6">
                 <p
                   className={`${roboto.className} text-[9px] text-white/30 uppercase tracking-[0.5em]`}

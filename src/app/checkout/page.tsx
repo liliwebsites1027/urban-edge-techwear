@@ -1,15 +1,30 @@
 "use client";
+import { useState } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import { Orbitron, Roboto_Mono } from "next/font/google";
-import { ShieldCheck, CreditCard, Lock, ArrowLeft } from "lucide-react";
+import {
+  ShieldCheck,
+  CreditCard,
+  Lock,
+  ArrowLeft,
+  Loader2,
+  CheckCircle2,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { createClient } from "../../../utils/supabase/client";
 
 const orbitron = Orbitron({ subsets: ["latin"] });
 const roboto = Roboto_Mono({ subsets: ["latin"] });
 
 export default function CheckoutPage() {
-  const { items } = useCartStore();
+  const { items, clearCart } = useCartStore(); // Assuming you have clearCart in your store
+  const [loading, setLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const router = useRouter();
+  const supabase = createClient();
+
   const subtotal = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0,
@@ -17,8 +32,71 @@ export default function CheckoutPage() {
   const shipping = 25.0;
   const total = subtotal + shipping;
 
+  const handleConfirmPay = async () => {
+    setLoading(true);
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        router.push("/login"); // Redirect to your login page
+        return;
+      }
+
+      // Record Order in Supabase
+      const { error } = await supabase.from("orders").insert({
+        user_id: user.id,
+        total_amount: total,
+        status: "confirmed",
+        // Optional: Store items as JSON if your schema allows
+        items: items.map((i) => ({ name: i.name, qty: i.quantity })),
+      });
+
+      if (error) throw error;
+
+      // Show success state
+      setIsSuccess(true);
+      clearCart();
+    } catch (error) {
+      alert("Transaction failed. Please check your connection.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <main className="bg-[#f4f4f7] min-h-screen pt-32 pb-20 px-6">
+    <main className="bg-[#f4f4f7] min-h-screen pt-32 pb-20 px-6 relative">
+      {/* Aesthetic Success Popup */}
+      {isSuccess && (
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="bg-white p-10 max-w-md w-full border-t-4 border-[#02A3DC] text-center space-y-6 shadow-2xl">
+            <CheckCircle2
+              size={60}
+              className="text-[#02A3DC] mx-auto animate-bounce"
+            />
+            <h2
+              className={`${orbitron.className} text-2xl tracking-tighter text-black`}
+            >
+              ORDER <span className="text-[#02A3DC]">VERIFIED</span>
+            </h2>
+            <p
+              className={`${roboto.className} text-[11px] text-gray-500 uppercase tracking-widest`}
+            >
+              Your transaction has been logged in our secure grid. Check your
+              email for details.
+            </p>
+            <button
+              onClick={() => router.push("/")}
+              className={`${orbitron.className} w-full py-4 bg-black text-white text-[10px] tracking-widest hover:bg-[#02A3DC] transition-colors`}
+            >
+              RETURN TO HUB
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-6xl mx-auto">
         {/* Security Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 border-b border-black/5 pb-8">
@@ -177,12 +255,20 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              <button className="w-full mt-8 bg-[#02A3DC] hover:bg-white hover:text-black text-white py-4 flex items-center justify-center gap-3 transition-all duration-300 group">
-                <ShieldCheck size={18} />
+              <button
+                onClick={handleConfirmPay}
+                disabled={loading || items.length === 0}
+                className="w-full mt-8 bg-[#02A3DC] hover:bg-white hover:text-black text-white py-4 flex items-center justify-center gap-3 transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <Loader2 size={18} className="animate-spin" />
+                ) : (
+                  <ShieldCheck size={18} />
+                )}
                 <span
-                  className={`${orbitron.className} text-[10px] uppercase font-bold tracking-[0.2em]`}
+                  className={`${orbitron.className} cursor-pointer text-[10px] uppercase font-bold tracking-[0.2em]`}
                 >
-                  Confirm & Pay
+                  {loading ? "Processing Grid..." : "Confirm & Pay"}
                 </span>
               </button>
             </div>

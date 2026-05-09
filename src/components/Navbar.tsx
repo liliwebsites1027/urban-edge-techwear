@@ -3,16 +3,16 @@ import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Search, Menu } from "lucide-react";
+import { Search, Menu, User as UserIcon } from "lucide-react";
 import { Orbitron } from "next/font/google";
 import { useCartStore } from "@/store/useCartStore";
+import { User } from "@supabase/supabase-js";
 import SearchOverlay from "./SearchOverlay";
 import CartSidebar from "./CartSidebar";
 import MobileMenu from "./MobileMenu";
 
 const orbitron = Orbitron({ subsets: ["latin"] });
 
-// Helper to avoid hydration mismatch
 const useIsClient = () => {
   return useSyncExternalStore(
     () => () => {},
@@ -21,7 +21,7 @@ const useIsClient = () => {
   );
 };
 
-export default function Navbar() {
+export default function Navbar({ user }: { user: User | null }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -34,11 +34,19 @@ export default function Navbar() {
   const textColor = isCheckout ? "text-zinc-900" : "text-white/90";
   const navLinkColor = isCheckout ? "text-zinc-800" : "text-white/70";
 
+  // Determine URL dynamically.
+  // On Server (isClient false), we use a stable base link to prevent hydration mismatch.
+  // On Client (isClient true), we append the dynamic pathname.
+  const loginUrl = user
+    ? "/profile"
+    : isClient
+      ? `/login?next=${pathname}`
+      : "/login";
+
   return (
     <>
       <nav className="fixed top-0 w-full z-50 bg-transparent transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between relative">
-          {/* MOBILE HAMBURGER */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className={`md:hidden p-2 -ml-2 transition-colors ${textColor} outline-none cursor-pointer`}
@@ -46,7 +54,6 @@ export default function Navbar() {
             <Menu size={24} />
           </button>
 
-          {/* CENTER LOGO (Mobile) / LEFT LOGO (Desktop) */}
           <Link
             href="/"
             className="flex flex-col items-center md:items-start select-none cursor-pointer absolute left-1/2 -translate-x-1/2 md:static md:left-auto md:translate-x-0"
@@ -67,7 +74,6 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* ACTIONS */}
           <div className="flex items-center gap-4 md:gap-10">
             <div
               className={`hidden md:flex items-center gap-12 font-sans text-[13px] font-medium transition-colors ${navLinkColor}`}
@@ -78,7 +84,6 @@ export default function Navbar() {
               >
                 Home
               </Link>
-              {/* Added Shop Link */}
               <Link
                 href="/shop"
                 className="hover:text-[#02A3DC] transition-colors tracking-wide uppercase"
@@ -103,22 +108,42 @@ export default function Navbar() {
                   ({isClient ? totalItems : 0})
                 </span>
               </button>
+
+              <Link
+                href={loginUrl}
+                className="hover:text-[#02A3DC] transition-colors tracking-wide uppercase"
+              >
+                {user ? "Account" : "Login"}
+              </Link>
             </div>
 
-            <button
-              onClick={() => setIsSearchOpen(true)}
-              className={`flex items-center justify-center w-10 h-10 rounded-sm transition-all duration-300 group ${
-                isCheckout
-                  ? "bg-zinc-900 text-white hover:bg-[#02A3DC]"
-                  : "bg-white text-black hover:bg-[#02A3DC] hover:text-white"
-              }`}
-            >
-              <Search
-                size={18}
-                strokeWidth={2.5}
-                className="group-hover:scale-110 cursor-pointer transition-transform"
-              />
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsSearchOpen(true)}
+                className={`flex items-center justify-center w-10 h-10 rounded-sm transition-all duration-300 group ${
+                  isCheckout
+                    ? "bg-zinc-900 text-white hover:bg-[#02A3DC]"
+                    : "bg-white text-black hover:bg-[#02A3DC] hover:text-white"
+                }`}
+              >
+                <Search
+                  size={18}
+                  strokeWidth={2.5}
+                  className="group-hover:scale-110 transition-transform"
+                />
+              </button>
+
+              <Link
+                href={loginUrl}
+                className={`md:hidden flex items-center justify-center w-10 h-10 rounded-sm transition-all duration-300 ${
+                  isCheckout
+                    ? "bg-zinc-900 text-white"
+                    : "bg-white/10 text-white hover:bg-[#02A3DC]"
+                }`}
+              >
+                <UserIcon size={18} strokeWidth={2.5} />
+              </Link>
+            </div>
           </div>
         </div>
       </nav>
@@ -128,13 +153,14 @@ export default function Navbar() {
         onClose={() => setIsMobileMenuOpen(false)}
         onOpenCart={() => setIsCartOpen(true)}
         totalItems={isClient ? totalItems : 0}
+        user={user}
+        pathname={pathname}
       />
 
       <SearchOverlay
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
       />
-
       <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );
