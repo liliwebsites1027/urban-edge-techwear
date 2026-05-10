@@ -25,11 +25,12 @@ export async function middleware(request: NextRequest) {
     },
   );
 
+  // Securely verify the user
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Protect the checkout route
+  // Redirect logic: If no user and trying to access checkout, send to login
   if (!user && request.nextUrl.pathname.startsWith("/checkout")) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
@@ -38,5 +39,15 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/checkout", "/auth/callback"],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - Public assets (svg, png, etc.)
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
 };

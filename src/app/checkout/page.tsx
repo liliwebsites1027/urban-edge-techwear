@@ -19,7 +19,7 @@ const orbitron = Orbitron({ subsets: ["latin"] });
 const roboto = Roboto_Mono({ subsets: ["latin"] });
 
 export default function CheckoutPage() {
-  const { items, clearCart } = useCartStore(); // Assuming you have clearCart in your store
+  const { items, clearCart } = useCartStore();
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const router = useRouter();
@@ -40,17 +40,37 @@ export default function CheckoutPage() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        router.push("/login"); // Redirect to your login page
+        router.push("/login");
         return;
       }
 
-      // Record Order in Supabase
+      // Record Order in Supabase orders table
       const { error } = await supabase.from("orders").insert({
         user_id: user.id,
         total_amount: total,
         status: "confirmed",
-        // Optional: Store items as JSON if your schema allows
-        items: items.map((i) => ({ name: i.name, qty: i.quantity })),
+        items: items.map((i) => ({
+          name: i.name,
+          qty: i.quantity,
+          price: i.price,
+        })),
+        shipping_address: {
+          full_name: (
+            document.querySelector(
+              'input[placeholder="Full Name"]',
+            ) as HTMLInputElement
+          )?.value,
+          city: (
+            document.querySelector(
+              'input[placeholder="City"]',
+            ) as HTMLInputElement
+          )?.value,
+          country: (
+            document.querySelector(
+              'input[placeholder="Country"]',
+            ) as HTMLInputElement
+          )?.value,
+        },
       });
 
       if (error) throw error;
@@ -58,8 +78,13 @@ export default function CheckoutPage() {
       // Show success state
       setIsSuccess(true);
       clearCart();
+
+      // Auto-redirect to home after 5 seconds
+      setTimeout(() => {
+        router.push("/");
+      }, 5000);
     } catch (error) {
-      alert("Transaction failed. Please check your connection.");
+      alert("Transaction failed. Grid connection interrupted.");
       console.error(error);
     } finally {
       setLoading(false);
@@ -70,7 +95,7 @@ export default function CheckoutPage() {
     <main className="bg-[#f4f4f7] min-h-screen pt-32 pb-20 px-6 relative">
       {/* Aesthetic Success Popup */}
       {isSuccess && (
-        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="bg-white p-10 max-w-md w-full border-t-4 border-[#02A3DC] text-center space-y-6 shadow-2xl">
             <CheckCircle2
               size={60}
@@ -84,14 +109,14 @@ export default function CheckoutPage() {
             <p
               className={`${roboto.className} text-[11px] text-gray-500 uppercase tracking-widest`}
             >
-              Your transaction has been logged in our secure grid. Check your
-              email for details.
+              Your transaction has been logged in our secure grid. Returning to
+              hub in 5 seconds...
             </p>
             <button
               onClick={() => router.push("/")}
               className={`${orbitron.className} w-full py-4 bg-black text-white text-[10px] tracking-widest hover:bg-[#02A3DC] transition-colors`}
             >
-              RETURN TO HUB
+              RETURN TO HUB NOW
             </button>
           </div>
         </div>
@@ -156,7 +181,7 @@ export default function CheckoutPage() {
                       <input
                         type="text"
                         className="w-full bg-[#fcfcfd] border border-gray-200 p-3 text-black text-xs focus:border-[#02A3DC] outline-none transition-all"
-                        placeholder={`Required`}
+                        placeholder={label}
                       />
                     </div>
                   ),

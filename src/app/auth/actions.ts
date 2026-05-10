@@ -8,6 +8,7 @@ export async function signup(formData: FormData) {
   const supabase = await createClient();
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const captchaToken = formData.get("captchaToken") as string; // Retrieve token
 
   // Password Validation (8+ chars, 1 number, 1 symbol)
   const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
@@ -27,6 +28,7 @@ export async function signup(formData: FormData) {
     email,
     password,
     options: {
+      captchaToken, // Pass token to Supabase
       // Logic: Use the current origin as the base, ensuring it points to /auth/callback
       emailRedirectTo: `${origin}/auth/callback?next=${next}`,
     },
